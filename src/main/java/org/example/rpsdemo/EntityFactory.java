@@ -15,9 +15,9 @@ public class EntityFactory {
 
     public void createEntities() {      //(kendi tercihim paperi rocku scissorsu farklı farklı listelere kaydedip oluşturmaktı performans kaybı yaşanmasın diye ama nesneler etkileşime girdiğinde ekleyip çıkarmak zordu
         for (int i = 0; i < 15; i++) {  // ve az nesne oldugu icin tek arraylist e koydum böylelikle çıkartma değişme işlerini daha kolay halledebilirim.
-            entityList.add(new Paper());
-            entityList.add(new Rock());
-            entityList.add(new Scissors());
+            entityList.add(new Paper("Paper.png"));
+            entityList.add(new Rock("Rock.png"));
+            entityList.add(new Scissors("Scissors.png"));
         }
     }
 
