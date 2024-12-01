@@ -2,9 +2,11 @@ package org.example.rpsdemo;
 
 // Şimdilik planladığım tüm olay kordinat girdilerine göre gerçeklşiyor şöyleki: Targetlardan en yakınını bul ve yakala
 
-public  class Entity implements EntityInterface{
+import java.util.List;
 
-    public static final int MAX_VALUE = 1000;
+public  abstract class Entity implements EntityInterface{
+
+    public static final int MAX_VALUE = 1080;
 
     protected double xCoordinate;
     protected double yCoordinate;
@@ -34,4 +36,6 @@ public  class Entity implements EntityInterface{
         double y = this.getyCoordinate() - alternates.getyCoordinate();
         return Math.pow(x,2) + Math.pow(y,2);
     }
+    public  abstract Entity determineTarget(Entity self, List<Entity> entityList);
+
 }

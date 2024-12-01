@@ -9,19 +9,20 @@ import java.util.List;
 
 public class Simulate {
     public static void main(String[] args) {
+
         EntityFactory factory = new EntityFactory();
         factory.createEntities();
         List<Entity> EntityList = factory.getEntityList();
 
 
-//        for(Entity entity : EntityList) {
-//            if (entity.getEntityType() == EntityType.PAPER) {
-//                Paper paper = (Paper) entity;                                                                 //dursun burda
-//                Entity closestHasım = paper.papersTarget.determine(entity,EntityList);
-//                System.out.println("Kağıt " + entity.getxCoordinate() + "," + entity.getyCoordinate() +
-//                        " en yakın taşı buldu: " + closestHasım.getxCoordinate() + "," + closestHasım.getyCoordinate());
-//            }
-//        }
+        for(Entity entity : EntityList) {
+            if (entity.getEntityType() == EntityType.PAPER) {
+                Paper paper = (Paper) entity;                                                                 //dursun burda
+                Entity closestHasım = paper.determineTarget(entity, EntityList);
+                System.out.println("Kağıt " + entity.getxCoordinate() + "," + entity.getyCoordinate() +
+                        " en yakın taşı buldu: " + closestHasım.getxCoordinate() + "," + closestHasım.getyCoordinate());
+            }
+        }
 
 
 
