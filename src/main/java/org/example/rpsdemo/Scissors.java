@@ -10,8 +10,10 @@ public class Scissors extends Entity{
 
     ImageView scissorsView;
 
+    public double xCoordinateScissors;
+
     public Scissors(String scissorsPath) {
-        super(Math.random() * MAX_VALUE, Math.random() * MAX_VALUE, EntityType.SCISSORS);
+        super(Math.random() * MAX_VALUE_X, Math.random() * MAX_VALUE_Y, EntityType.SCISSORS);
         this.scissorsView = new ImageView(new Image(scissorsPath));
 
         this.scissorsView.setFitWidth(40);

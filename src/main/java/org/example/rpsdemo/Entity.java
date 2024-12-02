@@ -6,7 +6,8 @@ import java.util.List;
 
 public  abstract class Entity implements EntityInterface{
 
-    public static final int MAX_VALUE = 1080;
+    public static final int MAX_VALUE_X = 1900;
+    public static final int MAX_VALUE_Y = 1070;
 
     protected double xCoordinate;
     protected double yCoordinate;

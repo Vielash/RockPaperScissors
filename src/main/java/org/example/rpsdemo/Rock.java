@@ -10,7 +10,7 @@ public class Rock extends Entity{
     ImageView rockView;
     public double xCoordinateRock;
     public Rock(String rockPath) {
-        super(Math.random() * MAX_VALUE, Math.random() * MAX_VALUE, EntityType.ROCK);
+        super(Math.random() * MAX_VALUE_X, Math.random() * MAX_VALUE_Y, EntityType.ROCK);
         this.rockView = new ImageView(new Image(rockPath));
 
         this.rockView.setFitWidth(40);

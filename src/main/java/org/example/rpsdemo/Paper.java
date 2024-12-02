@@ -11,11 +11,11 @@ public class Paper extends Entity {
     public ImageView paperView;
 
     public Paper(String paperPath) {
-        super(Math.random() * MAX_VALUE, Math.random() * MAX_VALUE, EntityType.PAPER);
+        super(Math.random() * MAX_VALUE_X, Math.random() * MAX_VALUE_Y, EntityType.PAPER);
         this.paperView = new ImageView(new Image(paperPath));
 
-        this.paperView.setFitWidth(100);
-        this.paperView.setFitHeight(100);
+        this.paperView.setFitWidth(40);
+        this.paperView.setFitHeight(40);
 
         this.paperView.setX(this.xCoordinate);
         this.paperView.setY(this.yCoordinate);
