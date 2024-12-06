@@ -6,6 +6,7 @@ import java.util.List;
 
 public  abstract class Entity implements EntityInterface{
 
+    private static final double SPEED = 2.0;
     public static final int MAX_VALUE_X = 1900;
     public static final int MAX_VALUE_Y = 1070;
 
@@ -37,6 +38,8 @@ public  abstract class Entity implements EntityInterface{
         double y = this.getyCoordinate() - alternates.getyCoordinate();
         return Math.pow(x,2) + Math.pow(y,2);
     }
-    public  abstract Entity determineTarget(Entity self, List<Entity> entityList);
+
+    public abstract void moveTarget(Entity target);
+
 
 }

@@ -10,5 +10,5 @@ public interface EntityInterface   {
     double getyCoordinate();
     EntityType getEntityType();
     double distanceTo(Entity alternates);
-    Entity determineTarget(Entity self, List<Entity> entityList);
+    void moveTarget(Entity e);
 }
