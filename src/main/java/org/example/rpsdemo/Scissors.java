@@ -7,12 +7,24 @@ import java.util.Comparator;
 import java.util.List;
 
 public class Scissors extends Entity{
-    public static final double SPEED = 3.0;
+    public static final double SPEED = 2.0;
 
     ImageView scissorsView;
 
+    public Scissors(double xCoordinate, double yCoordinate, String scissorsPath,EntityType type) {
+        super(xCoordinate, yCoordinate, EntityType.SCISSORS);
+        this.scissorsView = new ImageView(new Image(scissorsPath));
+
+        this.scissorsView.setFitWidth(20);
+        this.scissorsView.setFitHeight(20);
+
+        this.scissorsView.setX(this.xCoordinate);
+        this.scissorsView.setY(this.yCoordinate);
+
+    }
+
     public Scissors(String scissorsPath) {
-        super(Math.random() * MAX_VALUE_X, Math.random() * MAX_VALUE_Y, EntityType.SCISSORS);
+        this(Math.random() * MAX_VALUE_X, Math.random() * MAX_VALUE_Y, scissorsPath, EntityType.SCISSORS);
         this.scissorsView = new ImageView(new Image(scissorsPath));
 
         this.scissorsView.setFitWidth(40);
@@ -52,9 +64,16 @@ public class Scissors extends Entity{
 
             this.scissorsView.setX(currentX + birimX);
             this.scissorsView.setY(currentY + birimY);
+
+            this.xCoordinate = this.scissorsView.getX();
+            this.yCoordinate = this.scissorsView.getY();
+
        }
+
     }
 
-
-
+    @Override
+    public ImageView getView() {
+        return this.scissorsView;
+    }
 }

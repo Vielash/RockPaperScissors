@@ -1,6 +1,9 @@
 package org.example.rpsdemo;
 
-// Şimdilik planladığım tüm olay kordinat girdilerine göre gerçeklşiyor şöyleki: Targetlardan en yakınını bul ve yakala
+
+
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.util.List;
 
@@ -40,6 +43,9 @@ public  abstract class Entity implements EntityInterface{
     }
 
     public abstract void moveTarget(Entity target);
+    public abstract ImageView getView();
+
+
 
 
 }

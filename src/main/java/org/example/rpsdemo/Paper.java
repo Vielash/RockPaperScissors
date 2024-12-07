@@ -9,11 +9,20 @@ import java.util.List;
 public class Paper extends Entity {
     public ImageView paperView;
     private static final double SPEED = 2.0;
-    double[] paperTargetCoordinateX = new double[15];
-    double[] paperTargetCoordinateY = new double[15];
+
+    public Paper(double xCoordinate, double yCoordinate, String paperPath,EntityType type) {
+        super(xCoordinate, yCoordinate, EntityType.PAPER);
+        this.paperView = new ImageView(new Image(paperPath));
+
+        this.paperView.setFitWidth(45);
+        this.paperView.setFitHeight(45);
+
+        this.paperView.setX(this.xCoordinate);
+        this.paperView.setY(this.yCoordinate);
+    }
 
     public Paper(String paperPath) {
-        super(Math.random() * MAX_VALUE_X, Math.random() * MAX_VALUE_Y, EntityType.PAPER);
+        this(Math.random() * MAX_VALUE_X, Math.random() * MAX_VALUE_Y, paperPath, EntityType.PAPER);
         this.paperView = new ImageView(new Image(paperPath));
 
         this.paperView.setFitWidth(40);
@@ -27,7 +36,7 @@ public class Paper extends Entity {
         return entityList.stream()
                 .filter(e -> e.getEntityType() == EntityType.ROCK)
                 .filter(e -> e != self)
-                .min(Comparator.comparingDouble(e -> self.distanceTo(e))) //araştırdığım bir yapı o yüzden kendime hatırlatma yapıyorum kenidisini alıp her e ile kıyaslıyo ve minimumunu alıyo
+                .min(Comparator.comparingDouble(e -> self.distanceTo(e)))
                 .orElse(null);
     }
 
@@ -53,7 +62,17 @@ public class Paper extends Entity {
 
             this.paperView.setX(currentX + birimX);
             this.paperView.setY(currentY + birimY);
+
+            this.xCoordinate = this.paperView.getX();
+            this.yCoordinate = this.paperView.getY();
+
+
         }
+
+    }
+
+    public ImageView getView() {
+        return this.paperView;
     }
 
 

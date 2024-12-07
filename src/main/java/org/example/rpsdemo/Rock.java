@@ -9,11 +9,21 @@ import java.util.List;
 public class Rock extends Entity {
     public static final double SPEED = 2.0;
     ImageView rockView;
-    double[] rockTargetCoordinateX = new double[15];
-    double[] rockTargetCoordinateY = new double[15];
+
+
+    public Rock(double xCoordinate, double yCoordinate, String rockPath,EntityType type) {
+        super(xCoordinate,yCoordinate,EntityType.ROCK);
+        this.rockView = new ImageView(new Image(rockPath));
+
+        this.rockView.setFitWidth(40);
+        this.rockView.setFitHeight(40);
+
+        this.rockView.setX(this.xCoordinate);
+        this.rockView.setY(this.yCoordinate);
+    }
 
     public Rock(String rockPath) {
-        super(Math.random() * MAX_VALUE_X, Math.random() * MAX_VALUE_Y, EntityType.ROCK);
+        this(Math.random() * MAX_VALUE_X, Math.random() * MAX_VALUE_Y, rockPath, EntityType.ROCK);
         this.rockView = new ImageView(new Image(rockPath));
 
         this.rockView.setFitWidth(40);
@@ -54,8 +64,15 @@ public class Rock extends Entity {
 
             this.rockView.setX(currentX + birimX);
             this.rockView.setY(currentY + birimY);
-            System.out.println("Rock yeni pozisyon: (" + (currentX + birimX) + ", " + (currentY + birimY) + ")");
+
+            this.xCoordinate = this.rockView.getX();
+            this.yCoordinate = this.rockView.getY();
+
+
         }
+    }
+    public ImageView getView() {
+        return this.rockView;
     }
 
 }

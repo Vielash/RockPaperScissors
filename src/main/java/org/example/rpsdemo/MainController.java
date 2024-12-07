@@ -3,6 +3,7 @@ package org.example.rpsdemo;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,17 @@ import java.util.List;
 public class MainController {
     @FXML
     private Group root;
+
+    private static MainController instance;
+
+    public static MainController getInstance() {
+        if (instance == null) {
+            instance = new MainController();
+        }
+        return instance;
+    }
+
+
 
     private List<Entity> rocks = new ArrayList<>();
     private List<Entity> papers = new ArrayList<>();
