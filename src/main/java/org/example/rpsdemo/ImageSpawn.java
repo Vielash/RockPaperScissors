@@ -10,59 +10,78 @@ import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class ImageSpawn extends Application {
 
-//    private <T extends Entity, U extends Entity> void processEntities(    chatgptden aldım benim değil
-//            MainController mainController,
-//            AnchorPane anchorPane,
+    private static final double epsilon = 1.5;
+
+//    private <T extends Entity, U extends Entity> void processEntity(       Chatgpt ile aldığım bir model kod tekrarını azaltsın diye çünkü ben başaramadım açıkçası
+//            T entity,                                                  o yüzden çok fazla kod tekrarı var belki ilerideki zamanlarda döndüğümde düzeltebilirim.
 //            Class<T> currentType,
 //            Class<U> targetType,
 //            double epsilon,
-//            String newEntityImage,
-//            Function<T, Entity> determineTarget,
-//            Consumer<Entity> moveTarget,
-//            Function<String, T> createNewEntity) {
+//            String imagePath,
+//            Function<T, Entity> determineTargetFunction,
+//            BiConsumer<T, U> moveTargetFunction,
+//            Supplier<Entity> newEntitySupplier,
+//            AnchorPane anchorPane,
+//            MainController mainController) {
 //
-//        List<Entity> toRemove = new ArrayList<>();
+//        // Geçici listeler
 //        List<Entity> toAdd = new ArrayList<>();
+//        List<Entity> toRemove = new ArrayList<>();
 //
-//        for (Entity entity : mainController.getEntityList()) {
-//            if (currentType.isInstance(entity)) {
-//                T currentEntity = currentType.cast(entity);
+//        // Hedef nesneyi bul
+//        Entity closestTarget = determineTargetFunction.apply(entity);
+//        if (closestTarget != null) {
+//            moveTargetFunction.accept(entity, (U) closestTarget);
 //
-//                Entity closestTarget = determineTarget.apply(currentEntity);
-//                if (closestTarget != null) {
-//                    moveTarget.accept(closestTarget);
+//            // Eğer hedef ile mesafe küçükse, hedefi gizle ve yeni bir nesne ekle
+//            if (Math.abs(entity.xCoordinate - closestTarget.xCoordinate) < epsilon &&
+//                    Math.abs(entity.yCoordinate - closestTarget.yCoordinate) < epsilon) {
 //
-//                    if (Math.abs(entity.xCoordinate - closestTarget.xCoordinate) < epsilon &&
-//                            Math.abs(entity.yCoordinate - closestTarget.yCoordinate) < epsilon) {
+//                closestTarget.getView().setVisible(false);  // Görünürlüğü kaldır
+//                anchorPane.getChildren().remove(closestTarget.getView());  // AnchorPane'den çıkar
+//                toRemove.add(closestTarget);  // Geçici listeye ekle
 //
-//                        if (targetType.isInstance(closestTarget)) {
-//                            U target = targetType.cast(closestTarget);
-//                            target.getView().setVisible(false);
-//                            anchorPane.getChildren().remove(target.getView());
-//                            toRemove.add(target);
-//                        }
-//
-//                        T newEntity = createNewEntity.apply(newEntityImage);
-//                        toAdd.add(newEntity);
-//                        anchorPane.getChildren().add(newEntity.getView());
-//                    }
-//                }
+//                // Yeni nesneyi oluştur ve ekle
+//                Entity newEntity = newEntitySupplier.get();
+//                anchorPane.getChildren().add(newEntity.getView());
+//                toAdd.add(newEntity);  // Geçici listeye ekle
 //            }
 //        }
 //
-//        mainController.getEntityList().removeAll(toRemove);
-//        mainController.getEntityList().addAll(toAdd);
+//        // İşlem bittiğinde listeyi güncelle
+//        mainController.getEntityList().removeAll(toRemove);  // Silinecek nesneleri ana listeden çıkar
+//        mainController.getEntityList().addAll(toAdd);  // Yeni nesneleri ana listeye ekle
 //    }
+
+
+    private void winScene(String winner,Stage primaryStage) {
+        AnchorPane newAnchorPane = new AnchorPane();
+        Text winMessage = new Text(String.format("%s Kazandı!", winner)); // Dinamik yazı
+        winMessage.setFont(Font.font(50));
+        winMessage.setFill(Color.WHITE);
+        winMessage.setX(200);
+        winMessage.setY(250);
+        newAnchorPane.getChildren().add(winMessage);
+
+        Scene newScene = new Scene(newAnchorPane, 800, 600);
+        primaryStage.setScene(newScene);
+    }
+
 
 
     @Override
@@ -91,10 +110,9 @@ public class ImageSpawn extends Application {
             for (Entity entity : mainController.getEntityList()) {
                 if (entity.getEntityType() == EntityType.ROCK) {
                     Rock rock = (Rock) entity;
-                    Entity closestScissors = rock.determineTargetRock((Rock) entity, mainController.getEntityList());
+                    Entity closestScissors = rock.determineTarget((Rock) entity, mainController.getEntityList(),EntityType.SCISSORS);
                     rock.moveTarget((Scissors) closestScissors);
 
-                    double epsilon = 1.5;
                     if (closestScissors != null &&
                             Math.abs(entity.xCoordinate - closestScissors.xCoordinate) < epsilon &&
                             Math.abs(entity.yCoordinate - closestScissors.yCoordinate) < epsilon) {
@@ -113,10 +131,9 @@ public class ImageSpawn extends Application {
             for (Entity entity : mainController.getEntityList()) {
                 if (entity.getEntityType() == EntityType.PAPER) {
                     Paper paper = (Paper) entity;
-                    Entity closestRock = paper.determineTargetPaper((Paper) entity, mainController.getEntityList());
+                    Entity closestRock = paper.determineTarget((Paper) entity, mainController.getEntityList(),EntityType.ROCK);
                     paper.moveTarget((Rock) closestRock);
 
-                    double epsilon = 1.5;
                     if (closestRock != null &&
                             Math.abs(entity.xCoordinate - closestRock.xCoordinate) < epsilon &&
                             Math.abs(entity.yCoordinate - closestRock.yCoordinate) < epsilon) {
@@ -135,10 +152,9 @@ public class ImageSpawn extends Application {
             for (Entity entity : mainController.getEntityList()) {
                 if (entity.getEntityType() == EntityType.SCISSORS) {
                     Scissors scissors = (Scissors) entity;
-                    Entity closestPaper = scissors.determineTargetScissors((Scissors) entity, mainController.getEntityList());
+                    Entity closestPaper = scissors.determineTarget((Scissors) entity, mainController.getEntityList(), EntityType.PAPER);
                     scissors.moveTarget((Paper) closestPaper);
 
-                    double epsilon = 1.5;
                     if (closestPaper != null &&
                             Math.abs(entity.xCoordinate - closestPaper.xCoordinate) < epsilon &&
                             Math.abs(entity.yCoordinate - closestPaper.yCoordinate) < epsilon) {
@@ -156,6 +172,87 @@ public class ImageSpawn extends Application {
 
             mainController.getEntityList().removeAll(toRemove);
             mainController.getEntityList().addAll(toAdd);
+
+
+//            Iterator<Entity> iterator = mainController.getEntityList().iterator();
+//            while (iterator.hasNext()) {
+//                Entity entity = iterator.next();
+//                if (entity.getEntityType() == EntityType.ROCK) {
+//                    processEntity(
+//                            (Rock) entity,
+//                            Rock.class,
+//                            Scissors.class,
+//                            1.5,
+//                            "/Images/Rock.png",
+//                            rock -> rock.determineTargetRock(rock, mainController.getEntityList()),
+//                            (rock, scissors) -> rock.moveTarget((Scissors) scissors),
+//                            () -> new Rock(getClass().getResource("/Images/Rock.png").toExternalForm()),
+//                            anchorPane,
+//                            mainController
+//                    );
+//                }
+//            }
+//
+//            // Paper için işlem
+//            iterator = mainController.getEntityList().iterator();
+//            while (iterator.hasNext()) {
+//                Entity entity = iterator.next();
+//                if (entity.getEntityType() == EntityType.PAPER) {
+//                    processEntity(
+//                            (Paper) entity,
+//                            Paper.class,
+//                            Rock.class,
+//                            1.5,
+//                            "/Images/Paper.png",
+//                            paper -> paper.determineTargetPaper(paper, mainController.getEntityList()),
+//                            (paper, rock) -> paper.moveTarget((Rock) rock),
+//                            () -> new Paper(getClass().getResource("/Images/Paper.png").toExternalForm()),
+//                            anchorPane,
+//                            mainController
+//                    );
+//                }
+//            }
+//
+//            // Scissors için işlem
+//            iterator = mainController.getEntityList().iterator();
+//            while (iterator.hasNext()) {
+//                Entity entity = iterator.next();
+//                if (entity.getEntityType() == EntityType.SCISSORS) {
+//                    processEntity(
+//                            (Scissors) entity,
+//                            Scissors.class,
+//                            Paper.class,
+//                            1.5,
+//                            "/Images/Scissors.png",
+//                            scissors -> scissors.determineTargetScissors(scissors, mainController.getEntityList()),
+//                            (scissors, paper) -> scissors.moveTarget((Paper) paper),
+//                            () -> new Scissors(getClass().getResource("/Images/Scissors.png").toExternalForm()),
+//                            anchorPane,
+//                            mainController
+//                    );
+//                }
+//            }
+
+
+            if (mainController.getEntityList().size() == 1) {
+                Entity lastEntity = mainController.getEntityList().get(0);
+                switch (lastEntity.getEntityType()) {
+                    case ROCK:
+                        winScene("Taş", primaryStage);
+                        break;
+                    case PAPER:
+                        winScene("Kağıt",primaryStage);
+                        break;
+                    case SCISSORS:
+                        winScene("Makas",primaryStage);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+
+
         }));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();

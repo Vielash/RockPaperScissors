@@ -1,7 +1,5 @@
 package org.example.rpsdemo;
 
-//genişletilmeye açık eğer aynı boş metotlar olursa buraya atarım
-
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -15,4 +13,5 @@ public interface EntityInterface   {
     double distanceTo(Entity alternates);
     ImageView getView();
     void moveTarget(Entity e);
+
 }

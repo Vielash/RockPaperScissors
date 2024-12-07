@@ -34,43 +34,8 @@ public class Scissors extends Entity{
         this.scissorsView.setY(this.yCoordinate);
     }
 
-    public Entity determineTargetScissors(Scissors self, List<Entity> entityList) {
-        return entityList.stream()
-                .filter(e -> e.getEntityType() == EntityType.PAPER)
-                .filter(e -> e != self)
-                .min(Comparator.comparingDouble(e -> self.distanceTo(e))) //araştırdığım bir yapı o yüzden kendime hatırlatma yapıyorum kenidisini alıp her e ile kıyaslıyo ve minimumunu alıyo
-                .orElse(null);
-    }
-
-    @Override
-    public void moveTarget(Entity paper) {
-        if (paper == null){
-            return;
-        }
-        double targetX = paper.getxCoordinate();
-        double targetY = paper.getyCoordinate();
-
-        double currentX = this.scissorsView.getX();
-        double currentY = this.scissorsView.getY();
 
 
-        double deltaX = targetX - currentX;
-        double deltaY = targetY - currentY;
-        double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-
-        if (distance > 0) {
-            double birimX = SPEED * (deltaX / distance);
-            double birimY = SPEED * (deltaY / distance);
-
-            this.scissorsView.setX(currentX + birimX);
-            this.scissorsView.setY(currentY + birimY);
-
-            this.xCoordinate = this.scissorsView.getX();
-            this.yCoordinate = this.scissorsView.getY();
-
-       }
-
-    }
 
     @Override
     public ImageView getView() {

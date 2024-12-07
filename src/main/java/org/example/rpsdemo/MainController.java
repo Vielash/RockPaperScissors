@@ -64,10 +64,11 @@ public class MainController {
         allEntities.addAll(papers);
         allEntities.addAll(scissorsList);
 
-        System.out.println("Rocks: " + rocks.size());
-        System.out.println("Papers: " + papers.size());
-        System.out.println("Scissors: " + scissorsList.size());
     }
+
+
+
+
 
     public List<Entity> getEntityList() {
         return allEntities;

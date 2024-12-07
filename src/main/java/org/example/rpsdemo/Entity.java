@@ -5,6 +5,7 @@ package org.example.rpsdemo;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.util.Comparator;
 import java.util.List;
 
 public  abstract class Entity implements EntityInterface{
@@ -42,10 +43,45 @@ public  abstract class Entity implements EntityInterface{
         return Math.pow(x,2) + Math.pow(y,2);
     }
 
-    public abstract void moveTarget(Entity target);
+
+    @Override
+    public  void moveTarget(Entity target){
+        if (target == null) {
+            return;
+        }
+    double targetX = target.getxCoordinate();
+    double targetY = target.getyCoordinate();
+
+    double currentX = this.getView().getX();
+    double currentY = this.getView().getY();
+
+    double deltaX = targetX - currentX;
+    double deltaY = targetY - currentY;
+    double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+        if (distance > 0) {
+        double birimX = SPEED * (deltaX / distance);
+        double birimY = SPEED * (deltaY / distance);
+
+        this.getView().setX(currentX + birimX);
+        this.getView().setY(currentY + birimY);
+
+        this.xCoordinate = this.getView().getX();
+        this.yCoordinate = this.getView().getY();
+
+
+        }
+    }
+
+    public Entity determineTarget(Entity self, List<Entity> entityList, EntityType enemyType) {
+        return entityList.stream()
+                .filter(e -> e.getEntityType() == enemyType)
+                .filter(e -> e != self)
+                .min(Comparator.comparingDouble(e -> self.distanceTo(e)))
+                .orElse(null);
+    }
+
     public abstract ImageView getView();
-
-
 
 
 }

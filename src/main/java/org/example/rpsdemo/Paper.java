@@ -32,44 +32,9 @@ public class Paper extends Entity {
         this.paperView.setY(this.yCoordinate);
     }
 
-    public Entity determineTargetPaper(Paper self, List<Entity> entityList) {
-        return entityList.stream()
-                .filter(e -> e.getEntityType() == EntityType.ROCK)
-                .filter(e -> e != self)
-                .min(Comparator.comparingDouble(e -> self.distanceTo(e)))
-                .orElse(null);
-    }
-
-    @Override
-    public void moveTarget(Entity rock) {
-        if (rock == null){
-            return;
-        }
-        double targetX = rock.getxCoordinate();
-        double targetY = rock.getyCoordinate();
-
-        double currentX = this.paperView.getX();
-        double currentY = this.paperView.getY();
 
 
-        double deltaX = targetX - currentX;
-        double deltaY = targetY - currentY;
-        double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
-        if (distance > 0) {
-            double birimX = SPEED * (deltaX / distance);
-            double birimY = SPEED * (deltaY / distance);
-
-            this.paperView.setX(currentX + birimX);
-            this.paperView.setY(currentY + birimY);
-
-            this.xCoordinate = this.paperView.getX();
-            this.yCoordinate = this.paperView.getY();
-
-
-        }
-
-    }
 
     public ImageView getView() {
         return this.paperView;
