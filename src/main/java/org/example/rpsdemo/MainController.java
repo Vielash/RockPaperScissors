@@ -8,7 +8,7 @@ import javafx.scene.layout.AnchorPane;
 import java.util.ArrayList;
 import java.util.List;
 
-//senle de işim yok daha
+
 public class MainController {
     @FXML
     private Group root;
@@ -27,15 +27,10 @@ public class MainController {
     private List<Entity> scissorsList = new ArrayList<>();
     private List<Entity> allEntities = new ArrayList<>();
 
-    public void initialize() {
+    public void initialize() { //başta yaratılan 15er tane kağıt,makas,taş nesnesini sceneye ekliyor fxml dosyasına. başlar başlamaz çalışıyor bu metot
         String rockImagePath = getClass().getResource("/Images/Rock.png").toExternalForm();
         String scissorsImagePath = getClass().getResource("/Images/Scissors.png").toExternalForm();
         String paperImagePath = getClass().getResource("/Images/Paper.png").toExternalForm();
-
-        if (rockImagePath == null || scissorsImagePath == null || paperImagePath == null) {
-            System.out.println("Görüntü bulunamadı! Yolu kontrol edin.");
-            return;
-        }
 
         for (int i = 0; i < 15; i++) {
             Paper paper = new Paper(paperImagePath);
@@ -59,11 +54,9 @@ public class MainController {
             System.out.println();
         }
 
-
         allEntities.addAll(rocks);
         allEntities.addAll(papers);
         allEntities.addAll(scissorsList);
-
     }
 
 
