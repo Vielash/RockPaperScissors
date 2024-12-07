@@ -82,7 +82,12 @@ public class ImageSpawn extends Application {
 
 
 
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(10 ), event -> {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(10), event -> {
+
+            List<Entity> toRemove = new ArrayList<>();
+            List<Entity> toAdd = new ArrayList<>();
+
+
             for (Entity entity : mainController.getEntityList()) {
                 if (entity.getEntityType() == EntityType.ROCK) {
                     Rock rock = (Rock) entity;
@@ -94,21 +99,16 @@ public class ImageSpawn extends Application {
                             Math.abs(entity.xCoordinate - closestScissors.xCoordinate) < epsilon &&
                             Math.abs(entity.yCoordinate - closestScissors.yCoordinate) < epsilon) {
 
-
                         ((Scissors) closestScissors).scissorsView.setVisible(false);
                         anchorPane.getChildren().remove(((Scissors) closestScissors).scissorsView);
-                        mainController.getEntityList().remove(closestScissors);
-
+                        toRemove.add(closestScissors);
 
                         Rock newRock = new Rock(getClass().getResource("/Images/Rock.png").toExternalForm());
                         anchorPane.getChildren().add(newRock.rockView);
-                        mainController.getEntityList().add(newRock);
-
+                        toAdd.add(newRock);
                     }
                 }
             }
-
-
 
             for (Entity entity : mainController.getEntityList()) {
                 if (entity.getEntityType() == EntityType.PAPER) {
@@ -121,49 +121,41 @@ public class ImageSpawn extends Application {
                             Math.abs(entity.xCoordinate - closestRock.xCoordinate) < epsilon &&
                             Math.abs(entity.yCoordinate - closestRock.yCoordinate) < epsilon) {
 
-
-
                         ((Rock) closestRock).rockView.setVisible(false);
                         anchorPane.getChildren().remove(((Rock) closestRock).rockView);
-                        mainController.getEntityList().remove(closestRock);
+                        toRemove.add(closestRock);
 
                         Paper newPaper = new Paper(getClass().getResource("/Images/Paper.png").toExternalForm());
-                        mainController.getEntityList().add(newPaper);
+                        toAdd.add(newPaper);
                         anchorPane.getChildren().add(newPaper.paperView);
-
                     }
                 }
             }
-
-
 
             for (Entity entity : mainController.getEntityList()) {
                 if (entity.getEntityType() == EntityType.SCISSORS) {
                     Scissors scissors = (Scissors) entity;
                     Entity closestPaper = scissors.determineTargetScissors((Scissors) entity, mainController.getEntityList());
-                        scissors.moveTarget((Paper) closestPaper);
+                    scissors.moveTarget((Paper) closestPaper);
 
                     double epsilon = 1.5;
                     if (closestPaper != null &&
                             Math.abs(entity.xCoordinate - closestPaper.xCoordinate) < epsilon &&
                             Math.abs(entity.yCoordinate - closestPaper.yCoordinate) < epsilon) {
 
-
-
                         ((Paper) closestPaper).paperView.setVisible(false);
                         anchorPane.getChildren().remove(((Paper) closestPaper).paperView);
-                        mainController.getEntityList().remove(closestPaper);
+                        toRemove.add(closestPaper);
 
                         Scissors newScissors = new Scissors(getClass().getResource("/Images/Scissors.png").toExternalForm());
-                        mainController.getEntityList().add(newScissors);
+                        toAdd.add(newScissors);
                         anchorPane.getChildren().add(newScissors.scissorsView);
-
                     }
                 }
             }
 
-
-            System.out.println();
+            mainController.getEntityList().removeAll(toRemove);
+            mainController.getEntityList().addAll(toAdd);
         }));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();

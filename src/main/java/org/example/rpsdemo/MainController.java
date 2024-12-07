@@ -22,8 +22,6 @@ public class MainController {
         return instance;
     }
 
-
-
     private List<Entity> rocks = new ArrayList<>();
     private List<Entity> papers = new ArrayList<>();
     private List<Entity> scissorsList = new ArrayList<>();
